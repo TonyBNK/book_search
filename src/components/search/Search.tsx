@@ -1,24 +1,30 @@
 import React, {ChangeEvent, useState} from "react";
 import c from './Search.module.scss';
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {showBooks} from "../../bll/booksReducer";
+import {CategoriesFilter} from "./categories-filter/CategoriesFilter";
+import {SortingFilter} from "./sorting-filter/SortingFilter";
+import {RootStateType} from "../../bll/store";
 
 
 export const Search = () => {
     const [bookTitle, setBookTitle] = useState('');
+    const sorting = useSelector<RootStateType, string>(
+        state => state.books.sorting
+    )
     const dispatch = useDispatch();
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setBookTitle(e.currentTarget.value)
     }
     const findBooks = () => {
-        dispatch(showBooks(bookTitle, 0, true));
+        dispatch(showBooks(bookTitle, 0, true, sorting));
         setBookTitle('');
     }
 
-    return(
+    return (
         <div className={c.search}>
-            Search for books
+            <h1>Search for books</h1>
             <div className={c.searchContainer}>
                 <input
                     type="text"
@@ -27,20 +33,8 @@ export const Search = () => {
                 />
                 <button onClick={findBooks}>Find</button>
             </div>
-            <div className={c.categoriesFilter}>
-                <select name="" id="">
-                    <option value="">1</option>
-                    <option value="">2</option>
-                    <option value="">3</option>
-                </select>
-            </div>
-            <div className={c.sortingFilter}>
-                <select name="" id="">
-                    <option value="">1</option>
-                    <option value="">2</option>
-                    <option value="">3</option>
-                </select>
-            </div>
+            <CategoriesFilter/>
+            <SortingFilter/>
         </div>
     )
 }

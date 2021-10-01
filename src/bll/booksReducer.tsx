@@ -10,17 +10,19 @@ export type BookType = {
     authors: string[]
 }
 
-type BooksStateType = {
+export type BooksStateType = {
     searchStr: string
     books: Array<BookType>
     isFetching: boolean
     totalCount: Nullable<number>
     currentPage: number
+    sorting: string
 }
 export type BooksActionsType =
     ReturnType<typeof setBooks>
-    | ReturnType<typeof setFetching>;
-export type ShowMoreBooksType = (bookTitle: string, page: number, cleanUp: boolean) =>
+    | ReturnType<typeof setFetching>
+    | ReturnType<typeof setSorting>;
+export type ShowMoreBooksType = (bookTitle: string, page: number, cleanUp: boolean, sorting: string) =>
     (dispatch: (action: BooksActionsType) => void) => void
 
 
@@ -39,16 +41,21 @@ export const setFetching = (fetching: boolean) => ({
     type: 'SET-FETCHING',
     fetching
 } as const);
+export const setSorting = (sorting: string) => ({
+    type: 'SET-SORTING',
+    sorting
+} as const);
 
 export const showBooks: ShowMoreBooksType = (
     bookTitle,
     page,
-    cleanUp
+    cleanUp,
+    sorting
 ) => {
     return (dispatch) => {
         dispatch(setFetching(true));
         searchAPI
-            .getBooks(bookTitle, page)
+            .getBooks(bookTitle, page, sorting)
             .then(response => {
                 console.log(response);
                 dispatch(setFetching(false));
@@ -80,7 +87,8 @@ const initialState: BooksStateType = {
     books: [],
     isFetching: false,
     totalCount: null,
-    currentPage: 0
+    currentPage: 0,
+    sorting: 'relevance'
 };
 
 export const booksReducer = (state = initialState, action: BooksActionsType):
@@ -101,6 +109,11 @@ export const booksReducer = (state = initialState, action: BooksActionsType):
                 ...state,
                 isFetching: action.fetching
             };
+        case "SET-SORTING":
+            return {
+                ...state,
+                sorting: action.sorting
+            }
         default:
             return state;
     }
