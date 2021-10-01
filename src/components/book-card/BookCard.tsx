@@ -5,20 +5,22 @@ import {BookType} from "../../bll/booksReducer";
 
 export const BookCard: React.FC<BookType> = (
     {
+        id,
         image,
         title,
         authors,
         categories
     }
 ) => {
-    const categoryForBookCard = categories ? categories[0] : '';
-
     return (
-        <div className={c.bookCard}>
-            <img src={image} alt="КНИГА"/>
-            <h3>{title}</h3>
-            <p>{categoryForBookCard}</p>
-            <p>{authors}</p>
+        <div
+            key={id}
+            className={c.bookCard}
+        >
+            <img src={image} alt="book"/>
+            <h4>{title}</h4>
+            <p>{categories[0]}</p>
+            <p>{authors.join(', ')}</p>
         </div>
     )
 }

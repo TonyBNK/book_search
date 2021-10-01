@@ -1,21 +1,19 @@
 import React, {ChangeEvent, useState} from "react";
 import c from './Search.module.scss';
 import {useDispatch} from "react-redux";
-import {showMoreBooks} from "../../bll/booksReducer";
+import {showBooks} from "../../bll/booksReducer";
 
 
 export const Search = () => {
     const [bookTitle, setBookTitle] = useState('');
-    const [images, setImages] = useState([]);
-    const [searchResult, setSearchResult] = useState('');
-
     const dispatch = useDispatch();
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setBookTitle(e.currentTarget.value)
     }
     const findBooks = () => {
-        dispatch(showMoreBooks(bookTitle))
+        dispatch(showBooks(bookTitle, 0, true));
+        setBookTitle('');
     }
 
     return(
