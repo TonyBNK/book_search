@@ -1,7 +1,11 @@
-import React, {ChangeEvent, useState, KeyboardEvent} from "react";
+import React, {ChangeEvent, useState, KeyboardEvent, Dispatch} from "react";
 import c from './Search.module.scss';
 import {useDispatch, useSelector} from "react-redux";
-import {BooksStateType, showBooks} from "../../bll/booksReducer";
+import {
+    BooksDispatchType,
+    BooksStateType,
+    showBooks
+} from "../../bll/booksReducer";
 import {CategoriesFilter} from "./categories-filter/CategoriesFilter";
 import {SortingFilter} from "./sorting-filter/SortingFilter";
 import {RootStateType} from "../../bll/store";
@@ -13,7 +17,7 @@ export const Search = () => {
     const {sorting, category} = useSelector<RootStateType, BooksStateType>(
         state => state.books
     );
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<Dispatch<BooksDispatchType>>();
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setBookTitle(e.currentTarget.value)

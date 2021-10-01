@@ -14,17 +14,20 @@ export type BooksStateType = {
     searchStr: string
     books: Array<BookType>
     isFetching: boolean
+    isShown: boolean
     totalCount: Nullable<number>
     currentPage: number
     sorting: string
     category: string
 }
+export type BooksDispatchType = (dispatch: (action: BooksActionsType) => void) => void
 export type BooksActionsType =
     ReturnType<typeof setBooks>
     | ReturnType<typeof setFetching>
     | ReturnType<typeof setSorting>
-    | ReturnType<typeof setCategory>;
-export type ShowMoreBooksType = (bookTitle: string, page: number, cleanUp: boolean, sorting: string, category: string) =>
+    | ReturnType<typeof setCategory>
+    | ReturnType<typeof setShown>;
+export type ShowBooksType = (bookTitle: string, page: number, cleanUp: boolean, sorting: string, category: string) =>
     (dispatch: (action: BooksActionsType) => void) => void
 
 
@@ -51,8 +54,12 @@ export const setCategory = (category: string) => ({
     type: 'SET-CATEGORY',
     category
 } as const);
+export const setShown = (isShown: boolean) => ({
+    type: 'SET-SHOWN',
+    isShown
+} as const);
 
-export const showBooks: ShowMoreBooksType = (
+export const showBooks: ShowBooksType = (
     bookTitle,
     page,
     cleanUp,
@@ -66,16 +73,22 @@ export const showBooks: ShowMoreBooksType = (
             .then(response => {
                 console.log(response);
                 dispatch(setFetching(false));
-                const categorisedBooks = response.data.items.filter((book: any) => {
-                        if (category === 'all') {
-                            return true;
+                let categorisedBooks;
+                if (response.data.items) {
+                    categorisedBooks = response.data.items.filter((book: any) => {
+                            if (category === 'all') {
+                                return true;
+                            }
+                            if (book.volumeInfo.categories) {
+                                // return book.volumeInfo.categories.includes(category);
+                                return book.volumeInfo.categories[0] === category;
+                            }
+                            return false;
                         }
-                        if (book.volumeInfo.cotegories) {
-                            return book.volumeInfo.cotegories.includes(category);
-                        }
-                        return false;
-                    }
-                );
+                    );
+                } else {
+                    categorisedBooks = [];
+                }
 
                 const totalCount = response.data.totalItems;
                 const books = categorisedBooks.map((book: any) => {
@@ -94,6 +107,7 @@ export const showBooks: ShowMoreBooksType = (
                     }
                 });
                 dispatch(setBooks(bookTitle, books, totalCount, page, cleanUp));
+                dispatch(setShown(true));
             })
             .catch(err => console.log('error ', err));
     }
@@ -103,6 +117,7 @@ const initialState: BooksStateType = {
     searchStr: '',
     books: [],
     isFetching: false,
+    isShown: false,
     totalCount: null,
     currentPage: 0,
     sorting: 'relevance',
@@ -137,6 +152,11 @@ export const booksReducer = (state = initialState, action: BooksActionsType):
                 ...state,
                 category: action.category
             };
+        case "SET-SHOWN":
+            return {
+                ...state,
+                isShown: action.isShown
+            }
         default:
             return state;
     }

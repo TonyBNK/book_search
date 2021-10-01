@@ -1,20 +1,23 @@
 import c from "./SearchResult.module.scss";
 import React from "react";
 import {BookCard} from "../book-card/BookCard";
-import {BookType, Nullable} from "../../bll/booksReducer";
+import {BooksStateType, BookType} from "../../bll/booksReducer";
 import {useSelector} from "react-redux";
 import {RootStateType} from "../../bll/store";
+import {Preloader} from "../preloader/Preloader";
 
 
 export const SearchResult = () => {
-    const selectedBooks = useSelector<RootStateType, Array<BookType>>(
-        state => state.books.books
-    );
-    const totalCount = useSelector<RootStateType, Nullable<number>>(
-        state => state.books.totalCount
+    const {
+        books,
+        totalCount,
+        isShown,
+        isFetching
+    } = useSelector<RootStateType, BooksStateType>(
+        state => state.books
     );
 
-    const booksCards = selectedBooks.map((book: BookType) =>
+    const booksCards = books.map((book: BookType) =>
         <BookCard
             id={book.id}
             image={book.image}
@@ -24,16 +27,21 @@ export const SearchResult = () => {
         />
     )
 
-    console.log(selectedBooks);
-
     return (
-        <div className={c.searchResult}>
-            <div className={c.totalCount}>
-                {totalCount}
+        <>
+            <div className={c.searchResult}>
+                <div className={c.totalCount}>
+                    {
+                        isShown
+                            ? `Found ${totalCount} results`
+                            : ''
+                    }
+                </div>
+                <div className={c.booksContainer}>
+                    {isShown && booksCards.length === 0 ? 'There are no books with these filters' : booksCards}
+                </div>
             </div>
-            <div className={c.booksContainer}>
-                {booksCards.length === 0 ? 'There are no books with these filters' : booksCards}
-            </div>
-        </div>
+            {isFetching ? <Preloader/> : null}
+        </>
     )
 }
