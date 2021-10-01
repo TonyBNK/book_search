@@ -9,10 +9,10 @@ export type BookType = {
     categories: string[]
     authors: string[]
 }
-
 export type BooksStateType = {
     searchStr: string
     books: Array<BookType>
+    extraBooks: Array<BookType>
     isFetching: boolean
     isShown: boolean
     totalCount: Nullable<number>
@@ -26,9 +26,16 @@ export type BooksActionsType =
     | ReturnType<typeof setFetching>
     | ReturnType<typeof setSorting>
     | ReturnType<typeof setCategory>
-    | ReturnType<typeof setShown>;
-export type ShowBooksType = (bookTitle: string, page: number, cleanUp: boolean, sorting: string, category: string) =>
-    (dispatch: (action: BooksActionsType) => void) => void
+    | ReturnType<typeof setShown>
+    | ReturnType<typeof setExtraBooks>;
+export type ShowBooksType = (
+    bookTitle: string,
+    page: number,
+    cleanUp: boolean,
+    sorting: string,
+    category: string,
+    extraBooksFromState: Array<BookType>
+) => (dispatch: (action: BooksActionsType) => void) => void
 
 
 const setBooks = (
@@ -58,64 +65,107 @@ export const setShown = (isShown: boolean) => ({
     type: 'SET-SHOWN',
     isShown
 } as const);
+const setExtraBooks = (extraBooks: Array<BookType>, currentPage: number) => ({
+    type: 'SET-EXTRA-BOOKS',
+    extraBooks,
+    currentPage
+} as const);
+
+const checkBooksCategories = (books: Array<any>, category: string) => {
+    if (books) {
+        return books.filter((book: any) => {
+                if (category === 'all') {
+                    return true;
+                }
+                if (book.volumeInfo.categories) {
+                    // return book.volumeInfo.categories.includes(category);
+                    return book.volumeInfo.categories[0] === category;
+                }
+                return false;
+            }
+        );
+    } else {
+        return [];
+    }
+}
 
 export const showBooks: ShowBooksType = (
     bookTitle,
     page,
     cleanUp,
     sorting,
-    category
+    category,
+    extraBooksFromState
 ) => {
-    return (dispatch) => {
-        dispatch(setFetching(true));
-        searchAPI
-            .getBooks(bookTitle, page, sorting)
-            .then(response => {
-                console.log(response);
-                dispatch(setFetching(false));
-                let categorisedBooks;
-                if (response.data.items) {
-                    categorisedBooks = response.data.items.filter((book: any) => {
-                            if (category === 'all') {
-                                return true;
-                            }
-                            if (book.volumeInfo.categories) {
-                                // return book.volumeInfo.categories.includes(category);
-                                return book.volumeInfo.categories[0] === category;
-                            }
-                            return false;
-                        }
-                    );
-                } else {
-                    categorisedBooks = [];
+    return async (dispatch) => {
+        try {
+            dispatch(setFetching(true));
+            const response = await searchAPI.getBooks(bookTitle, page, sorting);
+
+            console.log(response);
+
+            let categorisedBooks: Array<BookType>;
+            let extraBooks: Array<BookType>;
+            let step = 1;
+
+            if (response.data.items) {
+                categorisedBooks = [...extraBooksFromState, ...checkBooksCategories(response.data.items, category)];
+
+                for (let i = 0; i < 3; i++) {
+                    if (categorisedBooks.length < 30) {
+                        const extraResponse = await searchAPI.getBooks(bookTitle, page + 30 * step, sorting);
+
+                        categorisedBooks = [...categorisedBooks, ...checkBooksCategories(extraResponse.data.items, category)];
+                        step++;
+                    } else {
+                        break;
+                    }
                 }
 
-                const totalCount = response.data.totalItems;
-                const books = categorisedBooks.map((book: any) => {
-                    return {
-                        id: book.id,
-                        image: book.volumeInfo.imageLinks
-                            ? book.volumeInfo.imageLinks.thumbnail
-                            : '',
-                        title: book.volumeInfo.title,
-                        categories: book.volumeInfo.categories
-                            ? book.volumeInfo.categories
-                            : [''],
-                        authors: book.volumeInfo.authors
-                            ? book.volumeInfo.authors
-                            : ['']
-                    }
-                });
-                dispatch(setBooks(bookTitle, books, totalCount, page, cleanUp));
-                dispatch(setShown(true));
-            })
-            .catch(err => console.log('error ', err));
+            } else {
+                categorisedBooks = [];
+            }
+
+            extraBooks = categorisedBooks.splice(30);
+
+            const totalCount = response.data.totalItems;
+
+            const books = categorisedBooks.map((book: any) => {
+                return {
+                    id: book.id,
+                    image: book.volumeInfo.imageLinks
+                        ? book.volumeInfo.imageLinks.thumbnail
+                        : '',
+                    title: book.volumeInfo.title,
+                    categories: book.volumeInfo.categories
+                        ? book.volumeInfo.categories
+                        : [''],
+                    authors: book.volumeInfo.authors
+                        ? book.volumeInfo.authors
+                        : ['']
+                }
+            });
+            dispatch(setFetching(false));
+
+            dispatch(setBooks(bookTitle, books, totalCount, page, cleanUp));
+
+            dispatch(setExtraBooks(extraBooks, page + 30 * step));
+
+            dispatch(setShown(true));
+
+            if (categorisedBooks.length === 0) {
+                dispatch(setShown(false));
+            }
+        } catch (err) {
+            console.log('error ', err);
+        }
     }
 }
 
 const initialState: BooksStateType = {
     searchStr: '',
     books: [],
+    extraBooks: [],
     isFetching: false,
     isShown: false,
     totalCount: null,
@@ -156,7 +206,13 @@ export const booksReducer = (state = initialState, action: BooksActionsType):
             return {
                 ...state,
                 isShown: action.isShown
-            }
+            };
+        case "SET-EXTRA-BOOKS":
+            return {
+                ...state,
+                extraBooks: action.extraBooks,
+                currentPage: action.currentPage
+            };
         default:
             return state;
     }

@@ -14,7 +14,7 @@ import {RootStateType} from "../../bll/store";
 export const Search = () => {
     const [bookTitle, setBookTitle] = useState('');
     const [error, setError] = useState<string | null>(null);
-    const {sorting, category} = useSelector<RootStateType, BooksStateType>(
+    const {sorting, category, extraBooks} = useSelector<RootStateType, BooksStateType>(
         state => state.books
     );
     const dispatch = useDispatch<Dispatch<BooksDispatchType>>();
@@ -24,7 +24,7 @@ export const Search = () => {
     }
     const findBooks = () => {
         if (bookTitle.trim()) {
-            dispatch(showBooks(bookTitle.trim(), 0, true, sorting, category));
+            dispatch(showBooks(bookTitle.trim(), 0, true, sorting, category, extraBooks));
             setBookTitle('');
         } else {
             setError("Title is required!");
@@ -33,7 +33,7 @@ export const Search = () => {
     const onEnterPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
             if (bookTitle.trim()) {
-                dispatch(showBooks(bookTitle.trim(), 0, true, sorting, category));
+                dispatch(showBooks(bookTitle.trim(), 0, true, sorting, category, extraBooks));
                 setBookTitle('');
             } else {
                 setError("Title is required!");

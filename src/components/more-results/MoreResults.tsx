@@ -15,7 +15,8 @@ export const MoreResults = () => {
         currentPage,
         sorting,
         category,
-        isShown
+        isShown,
+        extraBooks
     } = useSelector<RootStateType, BooksStateType>(
         state => state.books
     );
@@ -23,7 +24,7 @@ export const MoreResults = () => {
     const dispatch = useDispatch<Dispatch<BooksDispatchType>>();
 
     const showMore = () => {
-        dispatch(showBooks(searchStr, currentPage + 30, false, sorting, category));
+        dispatch(showBooks(searchStr, currentPage + 30, false, sorting, category, extraBooks));
     }
 
     return (
