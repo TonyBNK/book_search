@@ -11,6 +11,6 @@ const axiosInst = axios.create({
 export const searchAPI = {
     getBooks: (bookTitle: string, page: number, orderBy: string) => {
         return axiosInst
-            .get(`?${key}&q=${bookTitle}&startIndex=${page}&${portionSize}&${printType}&orderBy=${orderBy}`);
+            .get(`?${key}&startIndex=${page}&${portionSize}&${printType}&orderBy=${orderBy}&q=${bookTitle}`);
     },
 };

@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useEffect} from "react";
+import React, {ChangeEvent} from "react";
 import c from './SortingFilter.module.scss';
 import {setSorting} from "../../../bll/booksReducer";
 import {useDispatch} from "react-redux";

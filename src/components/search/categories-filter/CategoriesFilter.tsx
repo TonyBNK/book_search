@@ -1,11 +1,19 @@
-import React from "react";
+import React, {ChangeEvent} from "react";
 import c from './CategoriesFilter.module.scss';
+import {useDispatch} from "react-redux";
+import {setCategory} from "../../../bll/booksReducer";
 
 
 export const CategoriesFilter = () => {
-    return(
+    const dispatch = useDispatch();
+
+    const onChangeHandler = (e: ChangeEvent<HTMLSelectElement>) => {
+        dispatch(setCategory(e.currentTarget.value));
+    }
+
+    return (
         <div className={c.categoriesFilter}>
-            <select name="" id="">
+            <select onChange={onChangeHandler}>
                 <option value="all">All</option>
                 <option value="art">Art</option>
                 <option value="biography">Biography</option>

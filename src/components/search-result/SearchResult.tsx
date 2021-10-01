@@ -32,7 +32,7 @@ export const SearchResult = () => {
                 {totalCount}
             </div>
             <div className={c.booksContainer}>
-                {booksCards}
+                {booksCards.length === 0 ? 'There are no books with these filters' : booksCards}
             </div>
         </div>
     )

@@ -17,12 +17,14 @@ export type BooksStateType = {
     totalCount: Nullable<number>
     currentPage: number
     sorting: string
+    category: string
 }
 export type BooksActionsType =
     ReturnType<typeof setBooks>
     | ReturnType<typeof setFetching>
-    | ReturnType<typeof setSorting>;
-export type ShowMoreBooksType = (bookTitle: string, page: number, cleanUp: boolean, sorting: string) =>
+    | ReturnType<typeof setSorting>
+    | ReturnType<typeof setCategory>;
+export type ShowMoreBooksType = (bookTitle: string, page: number, cleanUp: boolean, sorting: string, category: string) =>
     (dispatch: (action: BooksActionsType) => void) => void
 
 
@@ -45,12 +47,17 @@ export const setSorting = (sorting: string) => ({
     type: 'SET-SORTING',
     sorting
 } as const);
+export const setCategory = (category: string) => ({
+    type: 'SET-CATEGORY',
+    category
+} as const);
 
 export const showBooks: ShowMoreBooksType = (
     bookTitle,
     page,
     cleanUp,
-    sorting
+    sorting,
+    category
 ) => {
     return (dispatch) => {
         dispatch(setFetching(true));
@@ -59,9 +66,19 @@ export const showBooks: ShowMoreBooksType = (
             .then(response => {
                 console.log(response);
                 dispatch(setFetching(false));
+                const categorisedBooks = response.data.items.filter((book: any) => {
+                        if (category === 'all') {
+                            return true;
+                        }
+                        if (book.volumeInfo.cotegories) {
+                            return book.volumeInfo.cotegories.includes(category);
+                        }
+                        return false;
+                    }
+                );
 
                 const totalCount = response.data.totalItems;
-                const books = response.data.items.map((book: any) => {
+                const books = categorisedBooks.map((book: any) => {
                     return {
                         id: book.id,
                         image: book.volumeInfo.imageLinks
@@ -88,7 +105,8 @@ const initialState: BooksStateType = {
     isFetching: false,
     totalCount: null,
     currentPage: 0,
-    sorting: 'relevance'
+    sorting: 'relevance',
+    category: 'all'
 };
 
 export const booksReducer = (state = initialState, action: BooksActionsType):
@@ -113,7 +131,12 @@ export const booksReducer = (state = initialState, action: BooksActionsType):
             return {
                 ...state,
                 sorting: action.sorting
-            }
+            };
+        case "SET-CATEGORY":
+            return {
+                ...state,
+                category: action.category
+            };
         default:
             return state;
     }
