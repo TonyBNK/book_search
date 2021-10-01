@@ -1,20 +1,20 @@
 import {searchAPI} from "../api/api";
 
-type BookType = {
-    img: string
+export type BookType = {
+    image: string
     title: string
-    category: string
-    authors: string
+    categories: string[]
+    authors: string[]
 }
 
 type BooksStateType = {
     books: Array<BookType>
     isFetching: boolean
 };
-type BooksActionsType =
+export type BooksActionsType =
     ReturnType<typeof setBooks>
     | ReturnType<typeof setFetching>;
-type ShowMoreBooksType = (bookTitle: string, currentPage: number) =>
+export type ShowMoreBooksType = (bookTitle: string, currentPage?: number) =>
     (dispatch: (action: BooksActionsType) => void) => void
 
 
@@ -27,23 +27,24 @@ export const setFetching = (fetching: boolean) => ({
     fetching
 } as const);
 
-export const showMoreBooks: ShowMoreBooksType = (bookTitle, currentPage) => {
+export const showMoreBooks: ShowMoreBooksType = (bookTitle, currentPage = 0) => {
     return (dispatch) => {
         dispatch(setFetching(true));
         searchAPI
-            .getBooks(bookTitle, currentPage)
+            .getBooks(bookTitle)
             .then(response => {
                 dispatch(setFetching(false));
                 const books = response.data.items.map((book: any) => {
-                    return{
-                        img: book.volumeInfo.imageLinks.thumbnail,
+                    return {
+                        image: book.volumeInfo.imageLinks.thumbnail,
                         title: book.volumeInfo.title,
-                        // category,
-                        // authors
+                        categories: book.volumeInfo.categories,
+                        authors: book.volumeInfo.authors
                     }
                 });
                 dispatch(setBooks(books));
             })
+            .catch(err => console.log('error ', err));
     }
 }
 
