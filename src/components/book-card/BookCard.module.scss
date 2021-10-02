@@ -1,0 +1,41 @@
+@import "../../styles/sass/mixins";
+@import "../../styles/sass/variables";
+
+
+.paper{
+  transition: 0.2s;
+  &:hover{
+    transform: scale(1.1);
+  }
+  margin: 0 10px;
+
+  .bookCard {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    min-height: 250px;
+    text-align: center;
+    cursor: pointer;
+
+    @media screen and (max-width: 387px) {
+      width: 250px;
+    }
+    @media screen and (max-width: 333px) {
+      width: 230px;
+    }
+
+    img{
+      height: 200px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .description {
+      @include text(sans-serif, 14px, 2em, #555555);
+      margin: 0 0 10px 0;
+    }
+  }
+}

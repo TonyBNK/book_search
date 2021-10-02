@@ -1,4 +1,5 @@
 import {searchAPI} from "../api/api";
+import emptyBook from "../images/emptyBook.jpg";
 
 
 export type Nullable<T> = T | null;
@@ -135,7 +136,7 @@ export const showBooks: ShowBooksType = (
                     id: book.id,
                     image: book.volumeInfo.imageLinks
                         ? book.volumeInfo.imageLinks.thumbnail
-                        : '',
+                        : emptyBook,
                     title: book.volumeInfo.title,
                     categories: book.volumeInfo.categories
                         ? book.volumeInfo.categories

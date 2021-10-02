@@ -28,6 +28,28 @@
   }
   label{
     font-weight: bold;
-    font-size: 15px;
+    font-size: 16px;
   }
+}
+
+@mixin itemsTitle() {
+  h4 {
+    line-height: 1.5em;
+  }
+}
+
+@mixin itemsBody() {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  row-gap: 40px;
+  padding-bottom: 40px;
+}
+
+@mixin text($fontFamily, $fontSize, $lineHeight, $textColor) {
+  font-family: $fontFamily;
+  font-size: $fontSize;
+  line-height: $lineHeight;
+  color: $textColor;
 }

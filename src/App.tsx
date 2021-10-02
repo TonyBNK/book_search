@@ -8,8 +8,10 @@ function App() {
     return (
         <div className={c.App}>
             <SearchComponent/>
-            <SearchResult/>
-            <MoreResults/>
+            <div className={c.resultsContainer}>
+                <SearchResult/>
+                <MoreResults/>
+            </div>
         </div>
     );
 }

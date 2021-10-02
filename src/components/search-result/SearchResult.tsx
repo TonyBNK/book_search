@@ -5,6 +5,7 @@ import {BooksStateType, BookType} from "../../bll/booksReducer";
 import {useSelector} from "react-redux";
 import {RootStateType} from "../../bll/store";
 import {Preloader} from "../preloader/Preloader";
+import {Grid} from "@mui/material";
 
 
 export const SearchResult = () => {
@@ -37,9 +38,11 @@ export const SearchResult = () => {
                             : ''
                     }
                 </div>
+
                 <div className={c.booksContainer}>
                     {isShown && booksCards.length === 0 ? 'There are no books with these filters' : booksCards}
                 </div>
+
             </div>
             {isFetching ? <Preloader/> : null}
         </>
