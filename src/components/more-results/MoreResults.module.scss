@@ -1,0 +1,19 @@
+@import "../../styles/sass/variables";
+@import "../../styles/sass/mixins";
+
+.moreResults {
+  min-height: 10vh;
+  background-color: $primaryColor;
+
+  @include itemsBody();
+  justify-content: center;
+  align-items: center;
+
+  button {
+    @include button();
+    transition: 0.2s;
+    &:hover{
+      transform: scale(1.1);
+    }
+  }
+}

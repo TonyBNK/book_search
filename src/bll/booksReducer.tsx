@@ -1,45 +1,14 @@
 import {searchAPI} from "../api/api";
 import emptyBook from "../images/emptyBook.jpg";
+import {
+    BooksActionsType,
+    BooksStateType,
+    BookType,
+    ShowBooksType
+} from "../types/types";
 
 
-export type Nullable<T> = T | null;
-export type BookType = {
-    id: string
-    image: string
-    title: string
-    categories: string[]
-    authors: string[]
-}
-export type BooksStateType = {
-    searchStr: string
-    books: Array<BookType>
-    extraBooks: Array<BookType>
-    isFetching: boolean
-    isShown: boolean
-    totalCount: Nullable<number>
-    currentPage: number
-    sorting: string
-    category: string
-}
-export type BooksDispatchType = (dispatch: (action: BooksActionsType) => void) => void
-export type BooksActionsType =
-    ReturnType<typeof setBooks>
-    | ReturnType<typeof setFetching>
-    | ReturnType<typeof setSorting>
-    | ReturnType<typeof setCategory>
-    | ReturnType<typeof setShown>
-    | ReturnType<typeof setExtraBooks>;
-export type ShowBooksType = (
-    bookTitle: string,
-    page: number,
-    cleanUp: boolean,
-    sorting: string,
-    category: string,
-    extraBooksFromState: Array<BookType>
-) => (dispatch: (action: BooksActionsType) => void) => void
-
-
-const setBooks = (
+export const setBooks = (
     searchStr: string, books: Array<BookType>, totalCount: number,
     currentPage: number, cleanUp: boolean
 ) => ({
@@ -62,11 +31,12 @@ export const setCategory = (category: string) => ({
     type: 'SET-CATEGORY',
     category
 } as const);
-export const setShown = (isShown: boolean) => ({
+export const setShown = (isButtonShown: boolean, isResultShown: boolean) => ({
     type: 'SET-SHOWN',
-    isShown
+    isButtonShown,
+    isResultShown
 } as const);
-const setExtraBooks = (extraBooks: Array<BookType>, currentPage: number) => ({
+export const setExtraBooks = (extraBooks: Array<BookType>, currentPage: number) => ({
     type: 'SET-EXTRA-BOOKS',
     extraBooks,
     currentPage
@@ -98,40 +68,60 @@ export const showBooks: ShowBooksType = (
     category,
     extraBooksFromState
 ) => {
+    let books: Array<BookType>;
+    let step = 30;
+    let noData = false;
+    let currentPage = page;
+
+    const checkNumberOfBooks = async (books: Array<any>, checkBooks: (books: Array<any>, category: string) => Array<any>) => {
+        books = [...checkBooks(books, category)];
+
+        if (noData) {
+            return books;
+        }
+
+        if (books.length < 30) {
+            const response = await searchAPI.getBooks(bookTitle, currentPage += 30, sorting);
+
+            if (response.data.items) {
+                response.data.items.length < 30 ? noData = true : noData = false;
+
+                books = await checkNumberOfBooks([...books, ...response.data.items], checkBooks);
+            }
+        }
+
+        return books;
+    }
+
     return async (dispatch) => {
         try {
             dispatch(setFetching(true));
-            const response = await searchAPI.getBooks(bookTitle, page, sorting);
 
-            console.log(response);
-
-            let categorisedBooks: Array<BookType>;
-            let extraBooks: Array<BookType>;
-            let step = 1;
+            const response = await searchAPI.getBooks(bookTitle, currentPage, sorting);
 
             if (response.data.items) {
-                categorisedBooks = [...extraBooksFromState, ...checkBooksCategories(response.data.items, category)];
+                books = [...extraBooksFromState, ...response.data.items];
 
-                for (let i = 0; i < 3; i++) {
-                    if (categorisedBooks.length < 30) {
-                        const extraResponse = await searchAPI.getBooks(bookTitle, page + 30 * step, sorting);
-
-                        categorisedBooks = [...categorisedBooks, ...checkBooksCategories(extraResponse.data.items, category)];
-                        step++;
-                    } else {
-                        break;
-                    }
+                if (category !== 'all') {
+                    books = await checkNumberOfBooks(books, checkBooksCategories);
                 }
 
             } else {
-                categorisedBooks = [];
+                if (extraBooksFromState.length !== 0) {
+                    books = [...extraBooksFromState];
+                } else {
+                    books = [];
+                    noData = true;
+                }
             }
 
-            extraBooks = categorisedBooks.splice(30);
+            const extraBooks = books.splice(step);
 
-            const totalCount = response.data.totalItems;
+            const totalCount = (books.length === 0 && noData) && response.data.totalItems === 0
+                ? 0
+                : response.data.totalItems
 
-            const books = categorisedBooks.map((book: any) => {
+            const booksForUI = books.map((book: any) => {
                 return {
                     id: book.id,
                     image: book.volumeInfo.imageLinks
@@ -148,15 +138,14 @@ export const showBooks: ShowBooksType = (
             });
             dispatch(setFetching(false));
 
-            dispatch(setBooks(bookTitle, books, totalCount, page, cleanUp));
+            dispatch(setBooks(bookTitle, booksForUI, totalCount, currentPage, cleanUp));
 
-            dispatch(setExtraBooks(extraBooks, page + 30 * step));
+            dispatch(setExtraBooks(extraBooks, currentPage));
 
-            dispatch(setShown(true));
+            noData || !totalCount
+                ? dispatch(setShown(false, true))
+                : dispatch(setShown(true, true));
 
-            if (categorisedBooks.length === 0) {
-                dispatch(setShown(false));
-            }
         } catch (err) {
             console.log('error ', err);
         }
@@ -168,7 +157,8 @@ const initialState: BooksStateType = {
     books: [],
     extraBooks: [],
     isFetching: false,
-    isShown: false,
+    isButtonShown: false,
+    isResultShown: false,
     totalCount: null,
     currentPage: 0,
     sorting: 'relevance',
@@ -206,7 +196,8 @@ export const booksReducer = (state = initialState, action: BooksActionsType):
         case "SET-SHOWN":
             return {
                 ...state,
-                isShown: action.isShown
+                isButtonShown: action.isButtonShown,
+                isResultShown: action.isResultShown
             };
         case "SET-EXTRA-BOOKS":
             return {

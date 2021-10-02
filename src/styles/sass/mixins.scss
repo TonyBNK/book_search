@@ -1,3 +1,5 @@
+@import "variables";
+
 @mixin bluredBackGround($backGroundColor, $position) {
   background-size: cover;
   background-position: center;
@@ -52,4 +54,18 @@
   font-size: $fontSize;
   line-height: $lineHeight;
   color: $textColor;
+}
+
+@mixin button(){
+  padding: 15px 30px;
+  @include text("Arial", 16px, 1.42857, $secondaryColor);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  overflow: hidden;
+  border: 1px solid $secondaryColor;
+  font-weight: 400;
+  text-align: center;
+  vertical-align: middle;
+  background: rgba(171,121,103,0.25);
+  cursor: pointer;
 }

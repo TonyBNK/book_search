@@ -1,17 +1,14 @@
 import React, {ChangeEvent, useState, KeyboardEvent, Dispatch} from "react";
 import c from './SearchComponent.module.scss';
 import {useDispatch, useSelector} from "react-redux";
-import {
-    BooksDispatchType,
-    BooksStateType,
-    showBooks
-} from "../../bll/booksReducer";
+import {showBooks} from "../../bll/booksReducer";
 import {CategoriesFilter} from "./categories-filter/CategoriesFilter";
 import {SortingFilter} from "./sorting-filter/SortingFilter";
 import {RootStateType} from "../../bll/store";
 import {IconButton, TextField} from "@material-ui/core";
 import {Search} from "@material-ui/icons";
 import titleImg from '../../images/book-dark-enlightenment-1029141-1024x683.jpg';
+import {BooksDispatchType, BooksStateType} from "../../types/types";
 
 
 export const SearchComponent = () => {

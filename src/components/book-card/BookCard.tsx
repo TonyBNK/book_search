@@ -1,7 +1,7 @@
 import React from "react";
 import c from './BookCard.module.scss';
-import {BookType} from "../../bll/booksReducer";
 import {Paper} from "@mui/material";
+import {BookType} from "../../types/types";
 
 
 export const BookCard: React.FC<BookType> = (
