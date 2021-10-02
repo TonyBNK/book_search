@@ -1,0 +1,14 @@
+@import "../../styles/sass/mixins";
+@import "../../styles/sass/variables";
+
+.preloader {
+  height: 100vh;
+  @include bluredBackGround($primaryColor, $secondaryPosition);
+
+  img {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}

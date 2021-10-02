@@ -79,7 +79,7 @@ const checkBooksCategories = (books: Array<any>, category: string) => {
                 }
                 if (book.volumeInfo.categories) {
                     // return book.volumeInfo.categories.includes(category);
-                    return book.volumeInfo.categories[0] === category;
+                    return book.volumeInfo.categories[0].toLowerCase() === category;
                 }
                 return false;
             }

@@ -1,5 +1,5 @@
 import React, {ChangeEvent, useState, KeyboardEvent, Dispatch} from "react";
-import c from './Search.module.scss';
+import c from './SearchComponent.module.scss';
 import {useDispatch, useSelector} from "react-redux";
 import {
     BooksDispatchType,
@@ -9,15 +9,25 @@ import {
 import {CategoriesFilter} from "./categories-filter/CategoriesFilter";
 import {SortingFilter} from "./sorting-filter/SortingFilter";
 import {RootStateType} from "../../bll/store";
+import {IconButton, TextField} from "@material-ui/core";
+import {Search} from "@material-ui/icons";
+import titleImg from '../../images/book-dark-enlightenment-1029141-1024x683.jpg';
 
 
-export const Search = () => {
+export const SearchComponent = () => {
     const [bookTitle, setBookTitle] = useState('');
     const [error, setError] = useState<string | null>(null);
-    const {sorting, category, extraBooks} = useSelector<RootStateType, BooksStateType>(
+    const {
+        sorting,
+        category,
+        extraBooks
+    } = useSelector<RootStateType, BooksStateType>(
         state => state.books
     );
     const dispatch = useDispatch<Dispatch<BooksDispatchType>>();
+    const titleImage = {
+      backgroundImage: `url(${titleImg})`
+    }
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setBookTitle(e.currentTarget.value)
@@ -43,22 +53,33 @@ export const Search = () => {
                 setError(null);
             }
         }
-    };
+    }
 
     return (
-        <div className={c.search}>
+        <div className={c.searchComponent} style={titleImage}>
             <h1>Search for books</h1>
             <div className={c.searchContainer}>
-                <input
-                    type="text"
+                <TextField
                     onChange={onChangeHandler}
                     value={bookTitle}
                     onKeyPress={onEnterPressHandler}
+                    error={!!error}
+                    label={!!error ? error : "Type book's title..."}
+                    variant={'standard'}
+                    color={'success'}
+                    autoFocus
                 />
-                <button onClick={findBooks}>Find</button>
+                <IconButton onClick={findBooks}>
+                    <Search
+                        fontSize={'large'}
+                        className={c.searchButton}
+                    />
+                </IconButton>
             </div>
-            <CategoriesFilter/>
-            <SortingFilter/>
+            <div className={c.filterContainer}>
+                <CategoriesFilter/>
+                <SortingFilter/>
+            </div>
         </div>
     )
 }

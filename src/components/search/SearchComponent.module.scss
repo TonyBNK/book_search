@@ -1,0 +1,59 @@
+@import "../../styles/sass/mixins";
+@import "../../styles/sass/variables";
+
+.searchComponent {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  min-height: 30vh;
+  justify-content: center;
+  text-align: center;
+  color: $primaryColor;
+
+  @include bluredBackGround($secondaryColor, $primaryPosition);
+
+  .searchContainer, .filterContainer, h1 {
+    position: relative;
+  }
+
+  .searchContainer, .filterContainer {
+    margin-bottom: 30px;
+  }
+
+  h1 {
+    margin: 30px;
+    font-size: 80px;
+    @media screen and(max-width: 800px) {
+      font-size: 70px;
+    }
+  }
+
+  .searchContainer {
+    background-color: $primaryColor;
+    min-width: 300px;
+    width: 30%;
+    display: flex;
+    justify-content: space-between;
+    padding-left: 10px;
+    border-radius: 5px;
+
+    input {
+      font-size: 18px;
+      width: 720px;
+      height: 100%;
+    }
+
+    label {
+      font-size: 18px;
+    }
+  }
+
+  .filterContainer {
+    display: flex;
+    flex-direction: row;
+    min-width: 300px;
+    width: 30%;
+    justify-content: space-evenly;
+  }
+}

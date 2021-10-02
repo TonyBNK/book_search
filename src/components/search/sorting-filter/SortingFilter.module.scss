@@ -1,0 +1,6 @@
+@import "../../../styles/sass/mixins";
+@import "../../../styles/sass/variables";
+
+.sortingFilter{
+  @include filters($primaryColor);
+}
