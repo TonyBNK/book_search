@@ -19,6 +19,8 @@ export const SpecificBook = () => {
     const isFetching = useSelector<RootStateType, boolean>(
         state => state.books.commonSearch.isFetching
     );
+    const haveCategories = categories[0] !== '';
+    const haveAuthors = authors[0] !== '';
 
     return (
         <>
@@ -28,8 +30,12 @@ export const SpecificBook = () => {
                 </div>
                 <div className={c.body}>
                     <h3>{title}</h3>
-                    <span>{categories}</span>
-                    <span>{authors}</span>
+                    <p>
+                        {haveCategories ? `Categories: ${categories.join(' / ')}` : ''}
+                    </p>
+                    <p>
+                        {haveAuthors ? `Authors: ${authors.join(', ')}` : ''}
+                    </p>
                     <p>{description}</p>
                 </div>
             </div>
