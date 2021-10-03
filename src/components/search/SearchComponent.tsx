@@ -69,7 +69,6 @@ export const SearchComponent = () => {
                     label={!!error ? error : "Type book's title..."}
                     variant={'standard'}
                     color={'success'}
-                    autoFocus
                 />
                 <IconButton onClick={findBooks}>
                     <Search
