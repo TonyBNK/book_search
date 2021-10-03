@@ -1,7 +1,6 @@
 import React from "react";
 import c from './CategoriesFilter.module.scss';
 import {useDispatch} from "react-redux";
-import {setCategory} from "../../../bll/booksReducer";
 import {
     FormControl,
     InputLabel,
@@ -9,6 +8,7 @@ import {
     Select,
     SelectChangeEvent
 } from "@mui/material";
+import {setCategory} from "../../../bll/action-creators/actionCreators";
 
 
 export const CategoriesFilter = () => {

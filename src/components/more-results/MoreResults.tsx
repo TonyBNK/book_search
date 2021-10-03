@@ -1,9 +1,12 @@
 import c from "./MoreResults.module.scss";
 import React, {Dispatch} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {showBooks} from "../../bll/booksReducer";
 import {RootStateType} from "../../bll/store";
-import {BooksDispatchType, BooksStateType} from "../../types/types";
+import {
+    BooksDispatchType,
+    CommonSearchType
+} from "../../types/types";
+import {showBooks} from "../../bll/thunks/thunks";
 
 
 export const MoreResults = () => {
@@ -14,8 +17,8 @@ export const MoreResults = () => {
         category,
         isButtonShown,
         extraBooks
-    } = useSelector<RootStateType, BooksStateType>(
-        state => state.books
+    } = useSelector<RootStateType, CommonSearchType>(
+        state => state.books.commonSearch
     );
 
     const dispatch = useDispatch<Dispatch<BooksDispatchType>>();

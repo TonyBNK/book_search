@@ -13,4 +13,8 @@ export const searchAPI = {
         return axiosInst
             .get(`?${key}&startIndex=${page}&${portionSize}&${printType}&orderBy=${orderBy}&q=${bookTitle}`);
     },
+    getSpecificBook: (bookId: string) => {
+        return axiosInst
+            .get(`/${bookId}?${key}`);
+    }
 };

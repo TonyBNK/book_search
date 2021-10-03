@@ -4,7 +4,7 @@ import {BookCard} from "../book-card/BookCard";
 import {useSelector} from "react-redux";
 import {RootStateType} from "../../bll/store";
 import {Preloader} from "../preloader/Preloader";
-import {BooksStateType, BookType} from "../../types/types";
+import {BookType, CommonSearchType} from "../../types/types";
 
 
 export const SearchResult = () => {
@@ -13,8 +13,8 @@ export const SearchResult = () => {
         totalCount,
         isResultShown,
         isFetching
-    } = useSelector<RootStateType, BooksStateType>(
-        state => state.books
+    } = useSelector<RootStateType, CommonSearchType>(
+        state => state.books.commonSearch
     );
     const booksCards = books.map((book: BookType) =>
         <BookCard

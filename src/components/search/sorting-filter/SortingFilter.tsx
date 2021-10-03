@@ -1,6 +1,5 @@
 import React from "react";
 import c from './SortingFilter.module.scss';
-import {setSorting} from "../../../bll/booksReducer";
 import {useDispatch} from "react-redux";
 import {
     FormControl,
@@ -9,6 +8,7 @@ import {
     Select,
     SelectChangeEvent
 } from "@mui/material";
+import {setSorting} from "../../../bll/action-creators/actionCreators";
 
 
 export const SortingFilter = () => {

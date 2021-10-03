@@ -1,14 +1,16 @@
 import React, {ChangeEvent, useState, KeyboardEvent, Dispatch} from "react";
 import c from './SearchComponent.module.scss';
 import {useDispatch, useSelector} from "react-redux";
-import {showBooks} from "../../bll/booksReducer";
 import {CategoriesFilter} from "./categories-filter/CategoriesFilter";
 import {SortingFilter} from "./sorting-filter/SortingFilter";
 import {RootStateType} from "../../bll/store";
 import {IconButton, TextField} from "@material-ui/core";
 import {Search} from "@material-ui/icons";
-import titleImg from '../../images/book-dark-enlightenment-1029141-1024x683.jpg';
-import {BooksDispatchType, BooksStateType} from "../../types/types";
+import titleImg
+    from '../../images/book-dark-enlightenment-1029141-1024x683.jpg';
+import {BooksDispatchType, CommonSearchType} from "../../types/types";
+import {showBooks} from "../../bll/thunks/thunks";
+import {useHistory} from "react-router-dom";
 
 
 export const SearchComponent = () => {
@@ -18,13 +20,14 @@ export const SearchComponent = () => {
         sorting,
         category,
         extraBooks
-    } = useSelector<RootStateType, BooksStateType>(
-        state => state.books
+    } = useSelector<RootStateType, CommonSearchType>(
+        state => state.books.commonSearch
     );
     const dispatch = useDispatch<Dispatch<BooksDispatchType>>();
     const titleImage = {
-      backgroundImage: `url(${titleImg})`
+        backgroundImage: `url(${titleImg})`
     }
+    const history = useHistory();
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setBookTitle(e.currentTarget.value)
@@ -33,6 +36,7 @@ export const SearchComponent = () => {
         if (bookTitle.trim()) {
             dispatch(showBooks(bookTitle.trim(), 0, true, sorting, category, extraBooks));
             setBookTitle('');
+            history.push('/common-search');
         } else {
             setError("Title is required!");
         }
@@ -42,6 +46,7 @@ export const SearchComponent = () => {
             if (bookTitle.trim()) {
                 dispatch(showBooks(bookTitle.trim(), 0, true, sorting, category, extraBooks));
                 setBookTitle('');
+                history.push('/common-search');
             } else {
                 setError("Title is required!");
             }

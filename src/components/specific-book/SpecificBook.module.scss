@@ -1,0 +1,20 @@
+@import "../../styles/sass/variables";
+@import "../../styles/sass/mixins";
+
+.specificBook {
+  min-height: 60vh;
+  overflow: hidden;
+  max-width: 100%;
+  display: flex;
+  flex-direction: row;
+
+  .image {
+    margin-top: 30px;
+  }
+
+  .body {
+    @include itemsTitle();
+    margin-left: 30px;
+
+  }
+}
