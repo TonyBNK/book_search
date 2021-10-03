@@ -16,8 +16,8 @@ export const BookCard: React.FC<BookType> = (
         categories
     }
 ) => {
-    const haveCategory = categories[0] !== '';
-    const haveAuthors = authors[0] !== '';
+    const haveCategory = categories ? categories[0] !== '' : false;
+    const haveAuthors = authors ? authors[0] !== '' : false;
     const history = useHistory();
     const dispatch = useDispatch<Dispatch<BooksDispatchType>>();
 

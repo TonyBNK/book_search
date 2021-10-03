@@ -126,32 +126,14 @@ test('state should be set with show result and button', () => {
 });
 
 test('state should be set with extra books', () => {
-    const Action = setExtraBooks(
-        [
-            {
-                id: '2',
-                image: 'image2',
-                title: 'title2',
-                categories: ['category2'],
-                authors: ['author2']
-            },
-            {
-                id: '3',
-                image: 'image3',
-                title: 'title3',
-                categories: ['category3'],
-                authors: ['author3']
-            }
-        ],
-        65
-    );
+    const Action = setExtraBooks([], 65);
 
     let newState = booksReducer(state, Action);
 
     const booksForUI = [...newState.commonSearch.books, ...newState.commonSearch.extraBooks];
 
-    expect(newState.commonSearch.extraBooks.length).toBe(2);
-    expect(booksForUI.length).toBe(2);
+    expect(newState.commonSearch.extraBooks.length).toBe(0);
+    expect(booksForUI.length).toBe(0);
 });
 
 test('state should be set with specific book', () => {

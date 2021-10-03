@@ -87,10 +87,10 @@ test('SET-SHOWN action should be created', () => {
 });
 
 test('SET-EXTRA-BOOKS action should be created', () => {
-    const Action = setExtraBooks(randomBooks, 15);
+    const Action = setExtraBooks([], 15);
 
     expect(Action.type).toBe('SET-EXTRA-BOOKS');
-    expect(Action.extraBooks.length).toBe(3);
+    expect(Action.extraBooks.length).toBe(0);
     expect(Action.currentPage).toBe(15);
 });
 

@@ -1,4 +1,4 @@
-import {BookType, SpecificBookType} from "../../types/types";
+import {BookFromAPIType, BookType, SpecificBookType} from "../../types/types";
 
 
 export const setBooks = (
@@ -34,7 +34,7 @@ export const setShown = (isButtonShown: boolean, isResultShown: boolean) => ({
     isResultShown
 } as const);
 
-export const setExtraBooks = (extraBooks: Array<BookType>, currentPage: number) => ({
+export const setExtraBooks = (extraBooks: Array<BookFromAPIType>, currentPage: number) => ({
     type: 'SET-EXTRA-BOOKS',
     extraBooks,
     currentPage

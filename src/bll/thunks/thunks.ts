@@ -1,12 +1,19 @@
-import {BookType, ShowBooksType, ShowSpecificBookType} from "../../types/types";
+import {
+    BookFromAPIType, BookType,
+    ShowBooksType,
+    ShowSpecificBookType
+} from "../../types/types";
 import {searchAPI} from "../../api/api";
 import {
     setBooks,
     setExtraBooks,
     setFetching, setShown, setSpecificBook
 } from "../action-creators/actionCreators";
-import {checkBooksCategories} from "../utils/utils";
-import emptyBook from "../../images/emptyBook.jpg";
+import {
+    bookTypeFormatter,
+    checkBooksCategories,
+    specificBookTypeFormatter
+} from "../utils/utils";
 
 
 export const showBooks: ShowBooksType = (
@@ -17,12 +24,12 @@ export const showBooks: ShowBooksType = (
     category,
     extraBooksFromState
 ) => {
-    let books: Array<BookType>;
+    let books: Array<BookFromAPIType>;
     let step = 30;
     let noData = false;
     let currentPage = page;
 
-    const checkNumberOfBooks = async (books: Array<any>, checkBooks: (books: Array<any>, category: string) => Array<any>) => {
+    const checkNumberOfBooks = async (books: Array<BookFromAPIType>, checkBooks: (books: Array<BookFromAPIType>, category: string) => Array<BookFromAPIType>) => {
         books = [...checkBooks(books, category)];
 
         if (noData) {
@@ -70,21 +77,7 @@ export const showBooks: ShowBooksType = (
                 ? 0
                 : response.data.totalItems
 
-            const booksForUI = books.map((book: any) => {
-                return {
-                    id: book.id,
-                    image: book.volumeInfo.imageLinks
-                        ? book.volumeInfo.imageLinks.thumbnail
-                        : emptyBook,
-                    title: book.volumeInfo.title,
-                    categories: book.volumeInfo.categories
-                        ? book.volumeInfo.categories
-                        : [''],
-                    authors: book.volumeInfo.authors
-                        ? book.volumeInfo.authors
-                        : ['']
-                }
-            });
+            const booksForUI = books.map((book: BookFromAPIType): BookType => bookTypeFormatter(book));
 
             if (booksForUI.length < step) {
                 noData = true;
@@ -113,22 +106,7 @@ export const showSpecificBook: ShowSpecificBookType = (bookId) => {
             const response = await searchAPI.getSpecificBook(bookId);
 
             if (response.data) {
-                const bookData = {
-                    id: response.data.id,
-                    image: response.data.volumeInfo.imageLinks
-                        ? response.data.volumeInfo.imageLinks.small
-                        : emptyBook,
-                    title: response.data.volumeInfo.title,
-                    categories: response.data.volumeInfo.categories
-                        ? response.data.volumeInfo.categories
-                        : [''],
-                    authors: response.data.volumeInfo.authors
-                        ? response.data.volumeInfo.authors
-                        : [''],
-                    description: response.data.volumeInfo.description
-                        ? response.data.volumeInfo.description
-                        : ''
-                };
+                const bookData = specificBookTypeFormatter(response.data);
 
                 dispatch(setSpecificBook(bookData));
                 dispatch(setFetching(false));
