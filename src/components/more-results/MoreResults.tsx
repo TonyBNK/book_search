@@ -1,5 +1,5 @@
 import c from "./MoreResults.module.scss";
-import React, {Dispatch} from "react";
+import React, {Dispatch, useCallback} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {RootStateType} from "../../bll/store";
 import {
@@ -9,7 +9,7 @@ import {
 import {showBooks} from "../../bll/thunks/thunks";
 
 
-export const MoreResults = () => {
+export const MoreResults = React.memo(() => {
     const {
         searchStr,
         currentPage,
@@ -23,9 +23,9 @@ export const MoreResults = () => {
 
     const dispatch = useDispatch<Dispatch<BooksDispatchType>>();
 
-    const showMore = () => {
+    const showMore = useCallback(() => {
         dispatch(showBooks(searchStr, currentPage + 30, false, sorting, category, extraBooks));
-    }
+    }, [dispatch, category, currentPage, extraBooks, searchStr, sorting]);
 
     return (
         <div className={c.moreResults}>
@@ -39,4 +39,4 @@ export const MoreResults = () => {
 
         </div>
     )
-}
+});

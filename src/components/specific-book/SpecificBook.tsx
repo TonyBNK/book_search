@@ -5,7 +5,7 @@ import {RootStateType} from "../../bll/store";
 import {SpecificBookType} from "../../types/types";
 import {Preloader} from "../preloader/Preloader";
 
-export const SpecificBook = () => {
+export const SpecificBook = React.memo(() => {
     const {
         id,
         image,
@@ -42,4 +42,4 @@ export const SpecificBook = () => {
             {isFetching ? <Preloader/> : null}
         </>
     )
-}
+});

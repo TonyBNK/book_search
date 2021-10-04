@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useCallback} from "react";
 import c from './SortingFilter.module.scss';
 import {useDispatch} from "react-redux";
 import {
@@ -11,12 +11,12 @@ import {
 import {setSorting} from "../../../bll/action-creators/actionCreators";
 
 
-export const SortingFilter = () => {
+export const SortingFilter = React.memo(() => {
     const dispatch = useDispatch();
 
-    const onChangeHandler = (e: SelectChangeEvent) => {
+    const onChangeHandler = useCallback((e: SelectChangeEvent) => {
         dispatch(setSorting(e.target.value));
-    }
+    }, [dispatch]);
 
     return (
         <div className={c.sortingFilter}>
@@ -42,4 +42,4 @@ export const SortingFilter = () => {
             </FormControl>
         </div>
     )
-}
+});

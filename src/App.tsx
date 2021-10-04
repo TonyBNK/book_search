@@ -6,7 +6,7 @@ import {MoreResults} from "./components/more-results/MoreResults";
 import {Redirect, Route} from "react-router-dom";
 import {SpecificBook} from "./components/specific-book/SpecificBook";
 
-function App() {
+const App = React.memo(() => {
     return (
         <div className={c.App}>
             <SearchComponent/>
@@ -24,6 +24,6 @@ function App() {
             </Route>
         </div>
     );
-}
+});
 
 export default App;

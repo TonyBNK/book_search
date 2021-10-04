@@ -1,4 +1,4 @@
-import React, {Dispatch} from "react";
+import React, {Dispatch, useCallback} from "react";
 import c from './BookCard.module.scss';
 import {Paper} from "@mui/material";
 import {BooksDispatchType, BookType} from "../../types/types";
@@ -7,7 +7,7 @@ import {useDispatch} from "react-redux";
 import {showSpecificBook} from "../../bll/thunks/thunks";
 
 
-export const BookCard: React.FC<BookType> = (
+export const BookCard: React.FC<BookType> = React.memo((
     {
         id,
         image,
@@ -21,10 +21,10 @@ export const BookCard: React.FC<BookType> = (
     const history = useHistory();
     const dispatch = useDispatch<Dispatch<BooksDispatchType>>();
 
-    const onBookCardClickHandler = () => {
+    const onBookCardClickHandler = useCallback(() => {
         history.push('/specific-book');
         dispatch(showSpecificBook(id));
-    }
+    }, [dispatch, history, id]);
 
     return (
         <Paper
@@ -48,4 +48,4 @@ export const BookCard: React.FC<BookType> = (
             </div>
         </Paper>
     )
-}
+});

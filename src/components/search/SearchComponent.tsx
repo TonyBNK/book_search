@@ -1,4 +1,10 @@
-import React, {ChangeEvent, useState, KeyboardEvent, Dispatch} from "react";
+import React, {
+    ChangeEvent,
+    useState,
+    KeyboardEvent,
+    Dispatch,
+    useCallback
+} from "react";
 import c from './SearchComponent.module.scss';
 import {useDispatch, useSelector} from "react-redux";
 import {CategoriesFilter} from "./categories-filter/CategoriesFilter";
@@ -13,7 +19,7 @@ import {showBooks} from "../../bll/thunks/thunks";
 import {useHistory} from "react-router-dom";
 
 
-export const SearchComponent = () => {
+export const SearchComponent = React.memo(() => {
     const [bookTitle, setBookTitle] = useState('');
     const [error, setError] = useState<string | null>(null);
     const {
@@ -29,10 +35,10 @@ export const SearchComponent = () => {
     }
     const history = useHistory();
 
-    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    const onChangeHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         setBookTitle(e.currentTarget.value)
-    }
-    const findBooks = () => {
+    }, []);
+    const findBooks = useCallback(() => {
         if (bookTitle.trim()) {
             dispatch(showBooks(bookTitle.trim(), 0, true, sorting, category, extraBooks));
             setBookTitle('');
@@ -40,8 +46,8 @@ export const SearchComponent = () => {
         } else {
             setError("Title is required!");
         }
-    }
-    const onEnterPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+    }, [dispatch, history, bookTitle, category, extraBooks, sorting]);
+    const onEnterPressHandler = useCallback((e: KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
             if (bookTitle.trim()) {
                 dispatch(showBooks(bookTitle.trim(), 0, true, sorting, category, extraBooks));
@@ -55,7 +61,7 @@ export const SearchComponent = () => {
                 setError(null);
             }
         }
-    }
+    }, [dispatch, history, bookTitle, category, extraBooks, sorting, error]);
 
     return (
         <div className={c.searchComponent} style={titleImage}>
@@ -83,4 +89,4 @@ export const SearchComponent = () => {
             </div>
         </div>
     )
-}
+});

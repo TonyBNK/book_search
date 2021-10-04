@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useCallback} from "react";
 import c from './CategoriesFilter.module.scss';
 import {useDispatch} from "react-redux";
 import {
@@ -11,12 +11,12 @@ import {
 import {setCategory} from "../../../bll/action-creators/actionCreators";
 
 
-export const CategoriesFilter = () => {
+export const CategoriesFilter = React.memo(() => {
     const dispatch = useDispatch();
 
-    const onChangeHandler = (e: SelectChangeEvent) => {
+    const onChangeHandler = useCallback((e: SelectChangeEvent) => {
         dispatch(setCategory(e.target.value));
-    }
+    }, [dispatch]);
 
     return (
         <div className={c.categoriesFilter}>
@@ -52,4 +52,4 @@ export const CategoriesFilter = () => {
             </FormControl>
         </div>
     )
-}
+});

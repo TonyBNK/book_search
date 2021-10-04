@@ -1,5 +1,5 @@
 import c from "./SearchResult.module.scss";
-import React from "react";
+import React, {useMemo} from "react";
 import {BookCard} from "../book-card/BookCard";
 import {useSelector} from "react-redux";
 import {RootStateType} from "../../bll/store";
@@ -7,7 +7,7 @@ import {Preloader} from "../preloader/Preloader";
 import {BookType, CommonSearchType} from "../../types/types";
 
 
-export const SearchResult = () => {
+export const SearchResult = React.memo(() => {
     const {
         books,
         totalCount,
@@ -16,15 +16,18 @@ export const SearchResult = () => {
     } = useSelector<RootStateType, CommonSearchType>(
         state => state.books.commonSearch
     );
-    const booksCards = books.map((book: BookType) =>
-        <BookCard
-            id={book.id}
-            image={book.image}
-            title={book.title}
-            categories={book.categories}
-            authors={book.authors}
-        />
-    );
+
+    const booksCards = useMemo(() => {
+        return books.map((book: BookType) =>
+            <BookCard
+                id={book.id}
+                image={book.image}
+                title={book.title}
+                categories={book.categories}
+                authors={book.authors}
+            />
+        );
+    }, [books]);
 
     return (
         <>
@@ -45,4 +48,4 @@ export const SearchResult = () => {
             {isFetching ? <Preloader/> : null}
         </>
     )
-}
+});
