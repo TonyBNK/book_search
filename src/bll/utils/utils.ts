@@ -29,7 +29,7 @@ export const bookTypeFormatter = (bookFromAPI: BookFromAPIType): BookType => {
         id: bookFromAPI.id,
         image: bookFromAPI.volumeInfo.imageLinks
             ? bookFromAPI.volumeInfo.imageLinks.thumbnail.toLowerCase()
-            : emptybook.toLowerCase(),
+            : emptybook,
         title: bookFromAPI.volumeInfo.title,
         authors: bookFromAPI.volumeInfo.authors
             ? bookFromAPI.volumeInfo.authors
@@ -45,7 +45,7 @@ export const specificBookTypeFormatter = (bookFromAPI: SpecificBookFromAPIType):
         id: bookFromAPI.id,
         image: bookFromAPI.volumeInfo.imageLinks
             ? bookFromAPI.volumeInfo.imageLinks.small.toLowerCase()
-            : emptybook.toLowerCase(),
+            : emptybook,
         title: bookFromAPI.volumeInfo.title,
         categories: bookFromAPI.volumeInfo.categories
             ? bookFromAPI.volumeInfo.categories
