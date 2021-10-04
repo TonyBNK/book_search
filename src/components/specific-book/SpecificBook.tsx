@@ -26,7 +26,7 @@ export const SpecificBook = React.memo(() => {
         <>
             <div key={id} className={c.specificBook}>
                 <div className={c.image}>
-                    <img src={image.toLowerCase()} alt="book"/>
+                    <img src={image} alt="book"/>
                 </div>
                 <div className={c.body}>
                     <h3>{title}</h3>

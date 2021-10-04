@@ -4,7 +4,7 @@ import {
     SpecificBookFromAPIType,
     SpecificBookType
 } from "../../types/types";
-import emptybook from "../../images/empty-book.jpg";
+import empty_book from "../../images/empty_book.jpg";
 
 export const checkBooksCategories = (books: Array<BookFromAPIType>, category: string): Array<BookFromAPIType> => {
     if (books) {
@@ -28,8 +28,8 @@ export const bookTypeFormatter = (bookFromAPI: BookFromAPIType): BookType => {
     return {
         id: bookFromAPI.id,
         image: bookFromAPI.volumeInfo.imageLinks
-            ? bookFromAPI.volumeInfo.imageLinks.thumbnail
-            : emptybook,
+            ? bookFromAPI.volumeInfo.imageLinks.thumbnail.toLowerCase()
+            : empty_book,
         title: bookFromAPI.volumeInfo.title,
         authors: bookFromAPI.volumeInfo.authors
             ? bookFromAPI.volumeInfo.authors
@@ -44,8 +44,8 @@ export const specificBookTypeFormatter = (bookFromAPI: SpecificBookFromAPIType):
     return {
         id: bookFromAPI.id,
         image: bookFromAPI.volumeInfo.imageLinks
-            ? bookFromAPI.volumeInfo.imageLinks.small
-            : emptybook,
+            ? bookFromAPI.volumeInfo.imageLinks.small.toLowerCase()
+            : empty_book,
         title: bookFromAPI.volumeInfo.title,
         categories: bookFromAPI.volumeInfo.categories
             ? bookFromAPI.volumeInfo.categories
