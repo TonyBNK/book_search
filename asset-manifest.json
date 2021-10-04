@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.css": "/book_search/static/css/main.109b75a6.chunk.css",
-    "main.js": "/book_search/static/js/main.911cdd12.chunk.js",
-    "main.js.map": "/book_search/static/js/main.911cdd12.chunk.js.map",
+    "main.css": "/book_search/static/css/main.ce1f61bf.chunk.css",
+    "main.js": "/book_search/static/js/main.b57ff2c4.chunk.js",
+    "main.js.map": "/book_search/static/js/main.b57ff2c4.chunk.js.map",
     "runtime-main.js": "/book_search/static/js/runtime-main.6cce4693.js",
     "runtime-main.js.map": "/book_search/static/js/runtime-main.6cce4693.js.map",
     "static/js/2.f2d1af0f.chunk.js": "/book_search/static/js/2.f2d1af0f.chunk.js",
@@ -10,7 +10,7 @@
     "static/js/3.aa8792fa.chunk.js": "/book_search/static/js/3.aa8792fa.chunk.js",
     "static/js/3.aa8792fa.chunk.js.map": "/book_search/static/js/3.aa8792fa.chunk.js.map",
     "index.html": "/book_search/index.html",
-    "static/css/main.109b75a6.chunk.css.map": "/book_search/static/css/main.109b75a6.chunk.css.map",
+    "static/css/main.ce1f61bf.chunk.css.map": "/book_search/static/css/main.ce1f61bf.chunk.css.map",
     "static/js/2.f2d1af0f.chunk.js.LICENSE.txt": "/book_search/static/js/2.f2d1af0f.chunk.js.LICENSE.txt",
     "static/media/book-dark-enlightenment-1029141-1024x683.e4e8a3f0.jpg": "/book_search/static/media/book-dark-enlightenment-1029141-1024x683.e4e8a3f0.jpg",
     "static/media/loading-37.cee87e9f.gif": "/book_search/static/media/loading-37.cee87e9f.gif"
@@ -18,7 +18,7 @@
   "entrypoints": [
     "static/js/runtime-main.6cce4693.js",
     "static/js/2.f2d1af0f.chunk.js",
-    "static/css/main.109b75a6.chunk.css",
-    "static/js/main.911cdd12.chunk.js"
+    "static/css/main.ce1f61bf.chunk.css",
+    "static/js/main.b57ff2c4.chunk.js"
   ]
 }
