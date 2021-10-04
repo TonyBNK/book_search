@@ -37,7 +37,7 @@ export const BookCard: React.FC<BookType> = React.memo((
                 onClick={onBookCardClickHandler}
                 style={{padding: '20px'}}
             >
-                <img src={image} alt="book"/>
+                <img src={image.toLowerCase()} alt="book"/>
                 <h4>{title}</h4>
                 <span className={c.description}>
                     {haveCategory ? `Category: ${categories[0]}` : ''}
