@@ -22,13 +22,11 @@ export const SpecificBook = React.memo(() => {
     const haveCategories = categories[0] !== '';
     const haveAuthors = authors[0] !== '';
 
-    const low_image = image.toLowerCase();
-
     return (
         <>
             <div key={id} className={c.specificBook}>
                 <div className={c.image}>
-                    <img src={low_image} alt="book"/>
+                    <img src={image} alt="book"/>
                 </div>
                 <div className={c.body}>
                     <h3>{title}</h3>
