@@ -2,9 +2,8 @@ import c from "./SearchResult.module.scss";
 import React, {useMemo} from "react";
 import {BookCard} from "../book-card/BookCard";
 import {useSelector} from "react-redux";
-import {RootStateType} from "../../bll/store";
 import {Preloader} from "../preloader/Preloader";
-import {BookType, CommonSearchType} from "../../types/types";
+import {BookType, CommonSearchType, RootStateType} from "../../types/types";
 
 
 export const SearchResult = React.memo(() => {

@@ -1,20 +1,19 @@
 import React, {
     ChangeEvent,
-    useState,
-    KeyboardEvent,
     Dispatch,
-    useCallback
+    KeyboardEvent,
+    useCallback,
+    useState
 } from "react";
 import c from './SearchComponent.module.scss';
 import {useDispatch, useSelector} from "react-redux";
 import {CategoriesFilter} from "./categories-filter/CategoriesFilter";
 import {SortingFilter} from "./sorting-filter/SortingFilter";
-import {RootStateType} from "../../bll/store";
 import {IconButton, TextField} from "@material-ui/core";
 import {Search} from "@material-ui/icons";
 import titleImg
     from '../../images/book-dark-enlightenment-1029141-1024x683.jpg';
-import {BooksDispatchType, CommonSearchType} from "../../types/types";
+import {AppThunkType, CommonSearchType, RootStateType} from "../../types/types";
 import {showBooks} from "../../bll/thunks/thunks";
 import {useHistory} from "react-router-dom";
 
@@ -29,7 +28,7 @@ export const SearchComponent = React.memo(() => {
     } = useSelector<RootStateType, CommonSearchType>(
         state => state.books.commonSearch
     );
-    const dispatch = useDispatch<Dispatch<BooksDispatchType>>();
+    const dispatch = useDispatch<Dispatch<AppThunkType>>();
     const titleImage = {
         backgroundImage: `url(${titleImg})`
     }

@@ -1,11 +1,21 @@
+import {ThunkAction} from "redux-thunk";
 import {
-    setBooks, setCategory, setExtraBooks,
-    setFetching, setShown,
-    setSorting, setSpecificBook
+    setBooks,
+    setCategory,
+    setExtraBooks,
+    setFetching,
+    setShown,
+    setSorting,
+    setSpecificBook
 } from "../bll/action-creators/actionCreators";
+import {rootReducer} from "../bll/store";
 
 
 export type Nullable<T> = T | null;
+
+export type RootStateType = ReturnType<typeof rootReducer>;
+
+export type AppThunkType<ReturnType = void> = ThunkAction<ReturnType, RootStateType, unknown, BooksActionsType>;
 
 export type BookType = {
     id: string
@@ -42,8 +52,6 @@ export type BooksStateType = {
     specificBook: SpecificBookType
 }
 
-export type BooksDispatchType = (dispatch: (action: BooksActionsType) => void) => void
-
 export type BooksActionsType =
     ReturnType<typeof setBooks>
     | ReturnType<typeof setFetching>
@@ -52,19 +60,6 @@ export type BooksActionsType =
     | ReturnType<typeof setShown>
     | ReturnType<typeof setExtraBooks>
     | ReturnType<typeof setSpecificBook>;
-
-export type ShowBooksType = (
-    bookTitle: string,
-    page: number,
-    cleanUp: boolean,
-    sorting: string,
-    category: string,
-    extraBooksFromState: Array<BookFromAPIType>
-) => (dispatch: (action: BooksActionsType) => void) => void
-
-export type ShowSpecificBookType = (
-    bookId: string
-) => (dispatch: (action: BooksActionsType) => void) => void
 
 export type BookFromAPIType = {
     kind: string

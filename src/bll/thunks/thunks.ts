@@ -1,13 +1,11 @@
-import {
-    BookFromAPIType, BookType,
-    ShowBooksType,
-    ShowSpecificBookType
-} from "../../types/types";
+import {AppThunkType, BookFromAPIType, BookType} from "../../types/types";
 import {searchAPI} from "../../api/api";
 import {
     setBooks,
     setExtraBooks,
-    setFetching, setShown, setSpecificBook
+    setFetching,
+    setShown,
+    setSpecificBook
 } from "../action-creators/actionCreators";
 import {
     bookTypeFormatter,
@@ -16,14 +14,14 @@ import {
 } from "../utils/utils";
 
 
-export const showBooks: ShowBooksType = (
-    bookTitle,
-    page,
-    cleanUp,
-    sorting,
-    category,
-    extraBooksFromState
-) => {
+export const showBooks = (
+    bookTitle: string,
+    page: number,
+    cleanUp: boolean,
+    sorting: string,
+    category: string,
+    extraBooksFromState: Array<BookFromAPIType>
+):AppThunkType => {
     let books: Array<BookFromAPIType>;
     let step = 30;
     let noData = false;
@@ -99,7 +97,7 @@ export const showBooks: ShowBooksType = (
     }
 }
 
-export const showSpecificBook: ShowSpecificBookType = (bookId) => {
+export const showSpecificBook = (bookId: string): AppThunkType => {
     return async (dispatch) => {
         try {
             dispatch(setFetching(true));

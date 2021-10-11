@@ -1,8 +1,7 @@
 import React from "react";
 import c from './SpecificBook.module.scss';
 import {useSelector} from "react-redux";
-import {RootStateType} from "../../bll/store";
-import {SpecificBookType} from "../../types/types";
+import {RootStateType, SpecificBookType} from "../../types/types";
 import {Preloader} from "../preloader/Preloader";
 
 export const SpecificBook = React.memo(() => {

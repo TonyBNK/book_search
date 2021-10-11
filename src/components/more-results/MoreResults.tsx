@@ -1,11 +1,7 @@
 import c from "./MoreResults.module.scss";
 import React, {Dispatch, useCallback} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {RootStateType} from "../../bll/store";
-import {
-    BooksDispatchType,
-    CommonSearchType
-} from "../../types/types";
+import {AppThunkType, CommonSearchType, RootStateType} from "../../types/types";
 import {showBooks} from "../../bll/thunks/thunks";
 
 
@@ -21,7 +17,7 @@ export const MoreResults = React.memo(() => {
         state => state.books.commonSearch
     );
 
-    const dispatch = useDispatch<Dispatch<BooksDispatchType>>();
+    const dispatch = useDispatch<Dispatch<AppThunkType>>();
 
     const showMore = useCallback(() => {
         dispatch(showBooks(searchStr, currentPage + 30, false, sorting, category, extraBooks));

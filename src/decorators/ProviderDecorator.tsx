@@ -1,8 +1,8 @@
 import {applyMiddleware, combineReducers, createStore} from "redux";
 import {booksReducer} from "../bll/reducers/booksReducer";
-import {RootStateType} from "../bll/store";
 import {Provider} from "react-redux";
 import thunkMiddleware from "redux-thunk";
+import {RootStateType} from "../types/types";
 
 
 const rootReducer = combineReducers({

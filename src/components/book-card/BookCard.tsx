@@ -1,7 +1,7 @@
 import React, {Dispatch, useCallback} from "react";
 import c from './BookCard.module.scss';
 import {Paper} from "@mui/material";
-import {BooksDispatchType, BookType} from "../../types/types";
+import {AppThunkType, BookType} from "../../types/types";
 import {useHistory} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {showSpecificBook} from "../../bll/thunks/thunks";
@@ -19,7 +19,7 @@ export const BookCard: React.FC<BookType> = React.memo((
     const haveCategory = categories ? categories[0] !== '' : false;
     const haveAuthors = authors ? authors[0] !== '' : false;
     const history = useHistory();
-    const dispatch = useDispatch<Dispatch<BooksDispatchType>>();
+    const dispatch = useDispatch<Dispatch<AppThunkType>>();
 
     const onBookCardClickHandler = useCallback(() => {
         history.push('/specific-book');
