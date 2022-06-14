@@ -1,6 +1,6 @@
 **Book Search**
 
-**Ссылка на демо проекта:** https://tonybnk-chat.netlify.app/
+**Ссылка на демо проекта:** https://tonybnk.github.io/book_search/#/common-search
 
 Проект представляет собой React-приложение поиска книг при использовании
 TypeScript, Redux, Google Books API.<br />
